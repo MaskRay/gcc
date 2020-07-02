@@ -2750,6 +2750,7 @@ common_handle_option (struct gcc_options *opts,
     case OPT_fuse_ld_bfd:
     case OPT_fuse_ld_gold:
     case OPT_fuse_ld_lld:
+    case OPT_fld_path_:
     case OPT_fuse_linker_plugin:
       /* No-op. Used by the driver and passed to us because it starts with f.*/
       break;

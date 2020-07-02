@@ -1077,7 +1077,7 @@ proper position among the other output files.  */
     LINK_PLUGIN_SPEC \
    "%{flto|flto=*:%<fcompare-debug*} \
     %{flto} %{fno-lto} %{flto=*} %l " LINK_PIE_SPEC \
-   "%{fuse-ld=*:-fuse-ld=%*} " LINK_COMPRESS_DEBUG_SPEC \
+   "%{fuse-ld=*:-fuse-ld=%*} %{fld-path=*:-fld-path=%*} " LINK_COMPRESS_DEBUG_SPEC \
    "%X %{o*} %{e*} %{N} %{n} %{r}\
     %{s} %{t} %{u*} %{z} %{Z} %{!nostdlib:%{!r:%{!nostartfiles:%S}}} \
     %{static|no-pie|static-pie:} %@{L*} %(mfwrap) %(link_libgcc) " \

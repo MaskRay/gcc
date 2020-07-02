@@ -844,6 +844,7 @@ main (int argc, char **argv)
   const char **ld1;
   bool use_plugin = false;
   bool use_collect_ld = false;
+  const char *ld_path = NULL;
 
   /* The kinds of symbols we will have to consider when scanning the
      outcome of a first pass link.  This is ALL to start with, then might
@@ -961,12 +962,21 @@ main (int argc, char **argv)
 	    if (selected_linker == USE_DEFAULT_LD)
 	      selected_linker = USE_PLUGIN_LD;
 	  }
-	else if (strcmp (argv[i], "-fuse-ld=bfd") == 0)
-	  selected_linker = USE_BFD_LD;
-	else if (strcmp (argv[i], "-fuse-ld=gold") == 0)
-	  selected_linker = USE_GOLD_LD;
-	else if (strcmp (argv[i], "-fuse-ld=lld") == 0)
-	  selected_linker = USE_LLD_LD;
+	else if (strncmp (argv[i], "-fuse-ld=bfd", 9) == 0
+		 && selected_linker != USE_LD_MAX)
+	  {
+	    if (strcmp (argv[i] + 9, "bfd") == 0)
+	      selected_linker = USE_BFD_LD;
+	    else if (strcmp (argv[i] + 9, "gold") == 0)
+	      selected_linker = USE_GOLD_LD;
+	    else if (strcmp (argv[i] + 9, "lld") == 0)
+	      selected_linker = USE_LLD_LD;
+	  }
+	else if (strncmp (argv[i], "-fld-path=", 10) == 0)
+	  {
+	    ld_path = argv[i] + 10;
+	    selected_linker = USE_LD_MAX;
+	  }
 	else if (strncmp (argv[i], "-o", 2) == 0)
 	  {
 	    /* Parse the output filename if it's given so that we can make
@@ -1117,14 +1127,27 @@ main (int argc, char **argv)
       ld_file_name = find_a_file (&cpath, collect_ld_suffix, X_OK);
       use_collect_ld = ld_file_name != 0;
     }
-  /* Search the compiler directories for `ld'.  We have protection against
-     recursive calls in find_a_file.  */
-  if (ld_file_name == 0)
-    ld_file_name = find_a_file (&cpath, ld_suffixes[selected_linker], X_OK);
-  /* Search the ordinary system bin directories
-     for `ld' (if native linking) or `TARGET-ld' (if cross).  */
-  if (ld_file_name == 0)
-    ld_file_name = find_a_file (&path, full_ld_suffixes[selected_linker], X_OK);
+  if (selected_linker == USE_LD_MAX)
+    {
+      /* If -fld-path= does not contain a slash, search for the command using
+	 the PATH environment variable.  */
+      if (lbasename (ld_path) == ld_path)
+	ld_file_name = find_a_file (&path, ld_path, X_OK);
+      else if (file_exists (ld_path))
+	ld_file_name = ld_path;
+    }
+  else
+    {
+      /* Search the compiler directories for `ld'.  We have protection against
+	 recursive calls in find_a_file.  */
+      if (ld_file_name == 0)
+	ld_file_name = find_a_file (&cpath, ld_suffixes[selected_linker], X_OK);
+      /* Search the ordinary system bin directories
+	 for `ld' (if native linking) or `TARGET-ld' (if cross).  */
+      if (ld_file_name == 0)
+	ld_file_name =
+	  find_a_file (&path, full_ld_suffixes[selected_linker], X_OK);
+    }
 
 #ifdef REAL_NM_FILE_NAME
   nm_file_name = find_a_file (&path, REAL_NM_FILE_NAME, X_OK);
@@ -1297,9 +1320,11 @@ main (int argc, char **argv)
 #endif
 		}
 	      else if (!use_collect_ld
-		       && strncmp (arg, "-fuse-ld=", 9) == 0)
+		       && (strncmp (arg, "-fuse-ld=", 9) == 0 ||
+			   strncmp (arg, "-fld-path=", 10) == 0))
 		{
-		  /* Do not pass -fuse-ld={bfd|gold|lld} to the linker. */
+		  /* Do not pass -fuse-ld={bfd|gold|lld} or -fld-path= to the
+		     linker. */
 		  ld1--;
 		  ld2--;
 		}

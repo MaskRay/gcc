@@ -14651,6 +14651,12 @@ Use the @command{gold} linker instead of the default linker.
 @opindex fuse-ld=lld
 Use the LLVM @command{lld} linker instead of the default linker.
 
+@item -fld-path=@var{linker}
+@opindex fld-path=linker
+Use the specified executable named @var{linker} instead of the default linker.
+If @var{linker} does not contain any slash character, the linker will be
+searched for using @env{PATH}.  This option overrides @option{-fuse-ld=}.
+
 @cindex Libraries
 @item -l@var{library}
 @itemx -l @var{library}
