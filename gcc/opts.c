@@ -1068,6 +1068,9 @@ finish_options (struct gcc_options *opts, struct gcc_options *opts_set,
   if (opts->x_flag_stack_protect == -1)
     opts->x_flag_stack_protect = DEFAULT_FLAG_SSP;
 
+  if (opts->x_flag_semantic_interposition == -1)
+    opts->x_flag_semantic_interposition = DEFAULT_FLAG_SEMANTIC_INTERPOSITION;
+
   if (opts->x_optimize == 0)
     {
       /* Inlining does not work if not optimizing,

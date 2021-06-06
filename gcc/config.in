@@ -125,6 +125,12 @@
 #endif
 
 
+/* Define if -fPIC defaults to -fsemantic-interposition */
+#ifndef USED_FOR_TARGET
+#undef ENABLE_DEFAULT_SEMANTIC_INTERPOSITION
+#endif
+
+
 /* Define if your target supports default stack protector and it is enabled.
    */
 #ifndef USED_FOR_TARGET

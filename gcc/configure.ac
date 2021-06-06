@@ -7419,6 +7419,18 @@ if test "$gcc_cv_no_pie" = "yes"; then
 fi
 AC_SUBST([NO_PIE_FLAG])
 
+# Check whether --enable-default-semantic-interposition=no was given.
+AC_ARG_ENABLE(default-semantic-interposition,
+[AS_HELP_STRING([--enable-default-semantic-interposition],
+  [enable -fsemantic-interposition as -fPIC default])],
+enable_default_semantic_interposition=$enableval,
+enable_default_semantic_interposition=yes)
+if test x$enable_default_semantic_interposition != xno ; then
+  AC_DEFINE(ENABLE_DEFAULT_SEMANTIC_INTERPOSITION, 1,
+      [Define if -fPIC defaults to -fsemantic-interposition.])
+fi
+AC_SUBST([enable_default_semantic_interposition])
+
 # Enable Intel CET on Intel CET enabled host if jit is enabled.
 GCC_CET_HOST_FLAGS(CET_HOST_FLAGS)
 case x$enable_languages in

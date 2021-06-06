@@ -1867,6 +1867,9 @@ mips-linux and s390-linux.
 @item --enable-default-pie
 Turn on @option{-fPIE} and @option{-pie} by default.
 
+@item --enable-default-semantic-interposition=no
+Make @option{-fPIC} default to @option{-fno-semantic-interposition}.
+
 @item --enable-secureplt
 This option enables @option{-msecure-plt} by default for powerpc-linux.
 @ifnothtml
