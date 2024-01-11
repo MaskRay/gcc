@@ -19,7 +19,6 @@
 
 ;;; Unused letters:
 ;;;           H
-;;;                             z
 
 ;; Integer register constraints.
 ;; It is not necessary to define 'r' here.
@@ -438,3 +437,7 @@
   "@internal constant that do not allow any unspec global offsets"
   (and (match_operand 0 "x86_64_immediate_operand")
        (match_test "!x86_poff_operand_p (op)")))
+
+(define_constraint "z"
+  "A symbolic reference or label reference."
+  (match_code "const,symbol_ref,label_ref"))

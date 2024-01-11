@@ -4286,6 +4286,10 @@ VSIB address operand.
 @item Ts
 Address operand without segment register.
 
+@item z
+A symbolic reference or label reference.
+You can use the @code{%p} modifier to print the raw symbol.
+
 @end table
 
 @item Xstormy16---@file{config/stormy16/stormy16.h}
